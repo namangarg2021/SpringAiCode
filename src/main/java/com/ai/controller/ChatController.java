@@ -1,21 +1,24 @@
 package com.ai.controller;
 
-import dev.langchain4j.model.chat.ChatModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.ai.service.ChatService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ChatController {
 	
-	ChatModel chatModel;
-	
-	public ChatController(ChatModel chatModel) {
-		this.chatModel = chatModel;
-	}
+	@Autowired
+	ChatService chatService;
 	
 	@GetMapping("/chat")
 	public String model(@RequestParam(value = "message", defaultValue = "Hello") String message) {
-		return chatModel.chat(message);
+		return chatService.chat(message);
+	}
+	
+	@GetMapping("/recommend")
+	public String recommendMovie(@RequestParam String type,
+	                             @RequestParam String year,
+                                 @RequestParam String lang) {
+		return chatService.recommendMovie(type, year, lang);
 	}
 }
